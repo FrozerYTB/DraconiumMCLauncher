@@ -270,7 +270,6 @@ stableReleaseTitle = "Version stable"
 releaseNotesFailed = "Échec du chargement des notes."
 
 [js.settings.updates]
-# On enlève les points qui font planter le launcher
 stableReleaseTitle = "Version stable"
 preReleaseTitle = "Version préliminaire"
 releaseNotesFailed = "Échec du chargement des notes de version."
