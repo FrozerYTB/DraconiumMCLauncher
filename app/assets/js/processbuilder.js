@@ -46,6 +46,24 @@ class ProcessBuilder {
      */
     build(){
         fs.ensureDirSync(this.gameDir)
+        // --- FORCE LE NETTOYAGE DU DOSSIER MODS ---
+        const modsFolder = path.join(this.gameDir, 'mods')
+            if (fs.existsSync(modsFolder)) {
+                const localFiles = fs.readdirSync(modsFolder)
+                const distroMods = this.server.modules.map(m => path.basename(m.getPath()))
+
+                localFiles.forEach(file => {
+                    // Si le fichier est un .jar et n'est pas dans la liste officielle, on le supprime
+                    if (file.endsWith('.jar') && !distroMods.includes(file)) {
+                        try {
+                            fs.removeSync(path.join(modsFolder, file))
+                            logger.info(`Fichier non autorisé supprimé : ${file}`)
+                        } catch (e) {
+                            logger.warn(`Impossible de supprimer le mod non autorisé : ${file}`)
+                        }
+                    }
+                })
+            }
         const tempNativePath = path.join(os.tmpdir(), ConfigManager.getTempNativeFolder(), crypto.pseudoRandomBytes(16).toString('hex'))
         process.throwDeprecation = true
         this.setupLiteLoader()

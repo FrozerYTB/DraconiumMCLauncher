@@ -856,33 +856,14 @@ let CACHE_DROPIN_MODS
  * populate the results onto the UI.
  */
 async function resolveDropinModsForUI(){
-    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
-    CACHE_SETTINGS_MODS_DIR = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id, 'mods')
-    CACHE_DROPIN_MODS = DropinModUtil.scanForDropinMods(CACHE_SETTINGS_MODS_DIR, serv.rawServer.minecraftVersion)
+    // On force le dossier à être vide pour le moteur de rendu
+    CACHE_DROPIN_MODS = []
+    const content = document.getElementById('settingsDropinModsContent')
+    if(content) content.innerHTML = ''
 
-    let dropinMods = ''
-
-    for(dropin of CACHE_DROPIN_MODS){
-        dropinMods += `<div id="${dropin.fullName}" class="settingsBaseMod settingsDropinMod" ${!dropin.disabled ? 'enabled' : ''}>
-                    <div class="settingsModContent">
-                        <div class="settingsModMainWrapper">
-                            <div class="settingsModStatus"></div>
-                            <div class="settingsModDetails">
-                                <span class="settingsModName">${dropin.name}</span>
-                                <div class="settingsDropinRemoveWrapper">
-                                    <button class="settingsDropinRemoveButton" remmod="${dropin.fullName}">${Lang.queryJS('settings.dropinMods.removeButton')}</button>
-                                </div>
-                            </div>
-                        </div>
-                        <label class="toggleSwitch">
-                            <input type="checkbox" formod="${dropin.fullName}" dropin ${!dropin.disabled ? 'checked' : ''}>
-                            <span class="toggleSwitchSlider"></span>
-                        </label>
-                    </div>
-                </div>`
-    }
-
-    document.getElementById('settingsDropinModsContent').innerHTML = dropinMods
+    // On désactive le bouton de dossier s'il existe
+    const fsBtn = document.getElementById('settingsDropinFileSystemButton')
+    if(fsBtn) fsBtn.style.display = 'none'
 }
 
 /**
