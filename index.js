@@ -237,7 +237,7 @@ function createWindow() {
         backgroundColor: '#171614'
     })
     remoteMain.enable(win.webContents)
-    win.webContents.openDevTools()
+    //win.webContents.openDevTools()
 
     const data = {
         bkid: Math.floor((Math.random() * fs.readdirSync(path.join(__dirname, 'app', 'assets', 'images', 'backgrounds')).length)),
